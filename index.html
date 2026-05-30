@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Biblioteca Apócrifa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cinzel+Decorative:wght@400;700&family=IM+Fell+English:ital@0;1&family=Uncial+Antiqua&display=swap" rel="stylesheet">
+<style>
+:root {
+  --parchment:   #F2E8D0;
+  --parchment2:  #E8D9B5;
+  --ink:         #1C1208;
+  --ink2:        #2E1F08;
+  --gold:        #B8860B;
+  --gold-light:  #D4A843;
+  --gold-bright: #F0C040;
+  --rust:        #8B3A0F;
+  --rust-light:  #B5562A;
+  --dark-bg:     #0D0904;
+  --dark2:       #160E05;
+  --border:      rgba(184,134,11,0.35);
+  --shadow:      rgba(0,0,0,0.7);
+}
+
+* { box-sizing:border-box; margin:0; padding:0; }
+
+html, body {
+  height:100%;
+  background:var(--dark-bg);
+  color:var(--parchment);
+  font-family:'IM Fell English',serif;
+  overflow-x:hidden;
+}
+
+/* ── BACKGROUND TEXTURE ── */
+body::before {
+  content:'';
+  position:fixed;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(184,134,11,0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(139,58,15,0.06) 0%, transparent 50%),
+    repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(255,255,255,0.003) 3px,rgba(255,255,255,0.003) 4px),
+    repeating-linear-gradient(90deg,transparent,transparent 3px,rgba(255,255,255,0.002) 3px,rgba(255,255,255,0.002) 4px);
+  pointer-events:none;
+}
+
+/* ── HEADER ── */
+.site-header {
+  position:relative;z-index:10;
+  text-align:center;
+  padding:52px 24px 36px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(180deg,rgba(184,134,11,0.06) 0%,transparent 100%);
+}
+.header-ornament {
+  font-size:28px;color:var(--gold);opacity:0.7;
+  letter-spacing:12px;margin-bottom:16px;display:block;
+}
+.site-title {
+  font-family:'Cinzel Decorative',serif;
+  font-size:clamp(22px,5vw,42px);
+  font-weight:700;
+  color:var(--gold-bright);
+  letter-spacing:3px;
+  text-shadow:0 0 40px rgba(240,192,64,0.3), 0 2px 4px rgba(0,0,0,0.8);
+  margin-bottom:8px;
+}
+.site-subtitle {
+  font-family:'Cinzel',serif;
+  font-size:12px;
+  letter-spacing:5px;
+  color:rgba(242,232,208,0.5);
+  text-transform:uppercase;
+  margin-bottom:20px;
+}
+.header-rule {
+  display:flex;align-items:center;gap:16px;justify-content:center;
+  margin-top:16px;
+}
+.header-rule span { height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);flex:1;max-width:200px; }
+.header-rule i { color:var(--gold);font-style:normal;font-size:14px; }
+
+/* ── LANG SELECTOR ── */
+.lang-bar {
+  position:relative;z-index:10;
+  display:flex;justify-content:center;align-items:center;gap:8px;
+  padding:16px 24px;
+  border-bottom:1px solid rgba(184,134,11,0.12);
+}
+.lang-label {
+  font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;
+  color:rgba(242,232,208,0.4);text-transform:uppercase;margin-right:8px;
+}
+.lang-btn {
+  padding:6px 18px;
+  border:1px solid rgba(184,134,11,0.3);
+  border-radius:2px;
+  background:transparent;
+  color:rgba(242,232,208,0.5);
+  font-family:'Cinzel',serif;font-size:11px;letter-spacing:2px;
+  cursor:pointer;transition:all .25s;
+}
+.lang-btn:hover { border-color:var(--gold);color:var(--gold-light);background:rgba(184,134,11,0.08); }
+.lang-btn.active { background:rgba(184,134,11,0.15);border-color:var(--gold);color:var(--gold-bright); }
+
+/* ── LAYOUT ── */
+.container {
+  position:relative;z-index:1;
+  max-width:1200px;margin:0 auto;
+  padding:40px 24px;
+  display:grid;
+  grid-template-columns:280px 1fr;
+  gap:0;
+  min-height:calc(100vh - 200px);
+}
+
+/* ── SIDEBAR / BOOK LIST ── */
+.sidebar {
+  border-right:1px solid var(--border);
+  padding-right:0;
+}
+.sidebar-title {
+  font-family:'Cinzel',serif;font-size:10px;letter-spacing:4px;
+  color:rgba(242,232,208,0.35);text-transform:uppercase;
+  padding:0 24px 16px;
+  border-bottom:1px solid rgba(184,134,11,0.1);
+  margin-bottom:8px;
+}
+.book-item {
+  display:flex;align-items:center;gap:12px;
+  padding:12px 24px;
+  cursor:pointer;
+  border-left:3px solid transparent;
+  transition:all .2s;
+  border-bottom:1px solid rgba(184,134,11,0.05);
+}
+.book-item:hover {
+  background:rgba(184,134,11,0.06);
+  border-left-color:rgba(184,134,11,0.4);
+}
+.book-item.active {
+  background:rgba(184,134,11,0.12);
+  border-left-color:var(--gold);
+}
+.book-num {
+  font-family:'Cinzel',serif;font-size:10px;
+  color:rgba(184,134,11,0.4);min-width:20px;
+}
+.book-item.active .book-num { color:var(--gold-light); }
+.book-name {
+  font-family:'IM Fell English',serif;font-size:13px;
+  color:rgba(242,232,208,0.6);line-height:1.3;
+}
+.book-item:hover .book-name, .book-item.active .book-name {
+  color:var(--parchment);
+}
+
+/* ── READER PANEL ── */
+.reader {
+  padding:0 40px;
+}
+.reader-header {
+  padding-bottom:24px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:32px;
+}
+.book-category {
+  font-family:'Cinzel',serif;font-size:10px;letter-spacing:4px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:10px;display:block;
+}
+.book-title {
+  font-family:'Cinzel',serif;font-size:clamp(20px,3vw,30px);font-weight:600;
+  color:var(--parchment);line-height:1.2;margin-bottom:8px;
+}
+.book-desc {
+  font-family:'IM Fell English',serif;font-size:14px;font-style:italic;
+  color:rgba(242,232,208,0.5);line-height:1.6;
+}
+
+/* ── CHAPTER NAV ── */
+.chapter-nav {
+  display:flex;flex-wrap:wrap;gap:6px;margin-bottom:28px;
+}
+.ch-btn {
+  padding:5px 14px;
+  border:1px solid rgba(184,134,11,0.25);
+  border-radius:2px;
+  background:transparent;
+  color:rgba(242,232,208,0.45);
+  font-family:'Cinzel',serif;font-size:10px;letter-spacing:1px;
+  cursor:pointer;transition:all .2s;
+}
+.ch-btn:hover { border-color:var(--gold);color:var(--gold-light);background:rgba(184,134,11,0.08); }
+.ch-btn.active { background:rgba(184,134,11,0.18);border-color:var(--gold);color:var(--gold-bright); }
+
+/* ── TRANSLATE CONTROLS ── */
+.translate-bar {
+  display:flex;align-items:center;gap:12px;margin-bottom:24px;
+  padding:12px 16px;
+  background:rgba(184,134,11,0.05);
+  border:1px solid rgba(184,134,11,0.15);
+  border-radius:3px;
+}
+.translate-label {
+  font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;
+  color:rgba(242,232,208,0.35);text-transform:uppercase;flex:1;
+}
+.translate-btn {
+  padding:6px 16px;
+  border:1px solid rgba(184,134,11,0.3);border-radius:2px;
+  background:transparent;color:rgba(242,232,208,0.55);
+  font-family:'Cinzel',serif;font-size:10px;letter-spacing:1.5px;
+  cursor:pointer;transition:all .2s;
+}
+.translate-btn:hover { border-color:var(--gold-light);color:var(--gold-bright);background:rgba(184,134,11,0.1); }
+.translate-btn.active { background:rgba(184,134,11,0.2);border-color:var(--gold);color:var(--gold-bright); }
+
+/* ── TEXT AREA ── */
+.chapter-content {
+  position:relative;
+}
+.chapter-heading {
+  font-family:'Cinzel',serif;font-size:13px;letter-spacing:3px;
+  color:var(--gold);text-transform:uppercase;margin-bottom:20px;
+  display:flex;align-items:center;gap:12px;
+}
+.chapter-heading::after { content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent); }
+
+.verse {
+  display:flex;gap:16px;margin-bottom:14px;line-height:1.8;
+}
+.verse-num {
+  font-family:'Cinzel',serif;font-size:10px;color:var(--gold);
+  min-width:24px;padding-top:3px;opacity:0.7;
+}
+.verse-text {
+  font-family:'IM Fell English',serif;font-size:16px;
+  color:rgba(242,232,208,0.85);line-height:1.8;
+}
+
+/* ── LOADING STATE ── */
+.translating-overlay {
+  display:none;
+  position:absolute;inset:0;
+  background:rgba(13,9,4,0.85);
+  align-items:center;justify-content:center;flex-direction:column;gap:16px;
+  border-radius:4px;z-index:20;
+}
+.translating-overlay.show { display:flex; }
+.loader-cross {
+  width:36px;height:36px;position:relative;
+}
+.loader-cross::before, .loader-cross::after {
+  content:'';position:absolute;background:var(--gold);border-radius:2px;
+  animation:crossPulse 1.2s ease-in-out infinite;
+}
+.loader-cross::before { width:4px;height:100%;left:50%;transform:translateX(-50%); }
+.loader-cross::after { height:4px;width:100%;top:50%;transform:translateY(-50%);animation-delay:.3s; }
+@keyframes crossPulse { 0%,100%{opacity:.3} 50%{opacity:1} }
+.loader-text {
+  font-family:'Cinzel',serif;font-size:11px;letter-spacing:3px;
+  color:var(--gold-light);text-transform:uppercase;opacity:0.7;
+}
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:400px;text-align:center;gap:16px;
+}
+.empty-ornament { font-size:48px;color:var(--gold);opacity:0.2;line-height:1; }
+.empty-title { font-family:'Cinzel',serif;font-size:14px;letter-spacing:3px;color:rgba(242,232,208,0.3); }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width:6px; }
+::-webkit-scrollbar-track { background:var(--dark-bg); }
+::-webkit-scrollbar-thumb { background:rgba(184,134,11,0.3);border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:rgba(184,134,11,0.5); }
+
+/* ── MOBILE ── */
+@media(max-width:768px) {
+  .container { grid-template-columns:1fr;grid-template-rows:auto 1fr; }
+  .sidebar { border-right:none;border-bottom:1px solid var(--border);padding-bottom:16px;margin-bottom:24px; }
+  .reader { padding:0; }
+  .book-list { display:flex;flex-wrap:wrap;gap:4px;padding:0 24px; }
+  .book-item { padding:8px 12px;border-left:none;border-bottom:none;border:1px solid rgba(184,134,11,0.2);border-radius:2px;flex-direction:column;align-items:flex-start;gap:2px; }
+  .sidebar-title { padding:0 24px 12px; }
+}
+
+/* fade-in */
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
+.fade-in { animation:fadeIn .4s ease both; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <span class="header-ornament">✦ ✦ ✦</span>
+  <div class="site-title">Biblioteca Apócrifa</div>
+  <div class="site-subtitle">Escritos Ocultos das Eras</div>
+  <div class="header-rule"><span></span><i>☩</i><span></span></div>
+</header>
+
+<!-- LANG BAR -->
+<div class="lang-bar">
+  <span class="lang-label">Idioma</span>
+  <button class="lang-btn active" data-lang="pt" onclick="setGlobalLang('pt',this)">Português</button>
+  <button class="lang-btn" data-lang="en" onclick="setGlobalLang('en',this)">English</button>
+  <button class="lang-btn" data-lang="es" onclick="setGlobalLang('es',this)">Español</button>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-title">Livros</div>
+    <div class="book-list" id="bookList"></div>
+  </aside>
+
+  <!-- READER -->
+  <main class="reader" id="reader">
+    <div class="empty-state" id="emptyState">
+      <div class="empty-ornament">☩</div>
+      <div class="empty-title">Selecione um livro para começar</div>
+    </div>
+    <div id="readerContent" style="display:none">
+      <div class="reader-header">
+        <span class="book-category" id="bookCategory"></span>
+        <div class="book-title" id="bookTitle"></div>
+        <div class="book-desc" id="bookDesc"></div>
+      </div>
+      <div class="chapter-nav" id="chapterNav"></div>
+      <div class="translate-bar">
+        <span class="translate-label">Traduzir este capítulo</span>
+        <button class="translate-btn" id="btnPt" onclick="translateChapter('pt')">PT</button>
+        <button class="translate-btn active" id="btnEn" onclick="translateChapter('en')">EN</button>
+        <button class="translate-btn" id="btnEs" onclick="translateChapter('es')">ES</button>
+      </div>
+      <div class="chapter-content" id="chapterContent">
+        <div class="translating-overlay" id="loadingOverlay">
+          <div class="loader-cross"></div>
+          <div class="loader-text">Traduzindo…</div>
+        </div>
+        <div class="chapter-heading" id="chapterHeading"></div>
+        <div id="versesContainer"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+// ──────────────────────────────────────────────
+// BOOK DATA (sample — replace with real content)
+// ──────────────────────────────────────────────
+const BOOKS = [
+  // 1
+  {
+    id: "enoch1",
+    name: "1º Livro de Enoque",
+    category: "Pseudepígrafo",
+    desc: "Obra atribuída ao patriarca Enoque, bisavô de Noé. Descreve viagens celestiais, os Vigilantes, anjos caídos e revelações escatológicas sobre o julgamento final.",
+    chapters: {
+      1: [
+        { n:1, text:"As palavras das bênçãos de Enoque, com as quais ele abençoou os eleitos e os justos, os quais devem existir nos tempos da tribulação, rejeitando toda iniquidade e mundanismo." },
+        { n:2, text:"Enoque, um homem justo, o qual estava com Deus, respondeu e falou com Deus enquanto seus olhos estavam abertos, e enquanto via uma santa visão dos céus. Isto os anjos me mostraram." },
+        { n:3, text:"Deles eu ouvi todas as coisas e entendi o que vi; coisas que não terão lugar nesta geração, mas numa geração que deve acontecer num tempo distante, por causa dos eleitos." },
+        { n:4, text:"A respeito deles eu falei e conversei com Ele, o qual virá de Sua habitação, o Santo e Poderoso, o Deus Criador do mundo, o qual pisará sobre o Monte Sinai." },
+        { n:5, text:"Eis que Ele vem com dezenas de milhares dos Seus santos para executar julgamento sobre os pecadores e destruir o iníquo, e reprovar toda coisa carnal e toda coisa pecaminosa e mundana que foi feita contra Ele." },
+      ],
+      2: [
+        { n:1, text:"Todos os que estão nos céus sabem o que transcorre lá. Eles sabem que as luminárias celestes não mudam seus caminhos; que cada uma nasce e se põe regularmente, cada uma a seu próprio tempo, sem transgredir os mandamentos que receberam." },
+        { n:2, text:"Eles veem o verão e o inverno: percebendo que toda terra está repleta de água; e que a nuvem, o orvalho, e a chuva refrescam-na." },
+      ],
+      6: [
+        { n:1, text:"E aconteceu depois que os filhos dos homens se multiplicaram naqueles dias, nasceram-lhe filhas, elegantes e belas." },
+        { n:2, text:"E quando os anjos, os filhos dos céus, viram-nas, enamoraram-se delas, dizendo uns para os outros: Vinde, selecionemos para nós mesmos esposas da progênie dos homens, e geremos filhos." },
+        { n:3, text:"Então seu líder Samyaza disse-lhes: Eu temo que talvez possais indispor-vos na realização deste empreendimento; e que só eu sofrerei por tão grave crime." },
+        { n:4, text:"Mas eles responderam-lhe: Nós todos juramos; e amarraram-se por mútuos juramentos que não mudariam sua intenção mas executariam seu empreendimento projetado." },
+        { n:5, text:"Todo seu número era duzentos, os quais descendiam de Ardis, o qual é o topo do monte Hérmon. Aquele monte portanto foi chamado Hérmon, porque eles tinham jurado sobre ele." },
+      ],
+      7: [
+        { n:1, text:"Então eles tomaram esposas, cada um escolhendo por si mesmo; as quais eles começaram a abordar, e com as quais eles coabitaram, ensinando-lhes sortilégios, encantamentos, e a divisão de raízes e árvores." },
+        { n:2, text:"E as mulheres conceberam e geraram gigantes, cuja estatura era de trezentos cúbitos. Estes devoravam tudo o que o labor dos homens produzia e tornou-se impossível alimentá-los." },
+        { n:3, text:"Então eles voltaram-se contra os homens, a fim de devorá-los; e começaram a ferir pássaros, animais, répteis e peixes, para comer sua carne e para beber seu sangue. Então a terra reprovou os injustos." },
+      ],
+      10: [
+        { n:1, text:"Então o Altíssimo, o Grande e Santo falou, e enviou a Uriel ao filho de Lameque, dizendo: Diz a ele em Meu nome: Esconde-te." },
+        { n:2, text:"Então explicou-lhe a consumação que está preste a acontecer; pois toda a terra perecerá; as águas do dilúvio virão sobre toda a terra, e todas as que estão nela serão destruídas." },
+        { n:3, text:"Novamente o Senhor disse a Rafael: Amarra a Azaziel, mãos e pés; lança-o na escuridão; e abrindo o deserto que está em Dudael, lança-o nele. Arremessa sobre ele pedras agudas, cobrindo-o com escuridão." },
+      ],
+    }
+  },
+  // 2
+  {
+    id: "enoch2",
+    name: "2º Livro de Enoque",
+    category: "Pseudepígrafo",
+    desc: "Enoque é levado pelos anjos em uma jornada através dos dez céus, contempla o Trono de Deus e recebe revelações sobre a criação do mundo e os segredos divinos.",
+    chapters: {
+      1: [
+        { n:1, text:"Havia um sábio, um grande artífice, e o Senhor dedicou-lhe seu amor e o recebeu, a ponto de fazê-lo testemunhar as mais altas moradas dos maiores e mais sábios e imutáveis reinos do Todo-Poderoso." },
+        { n:2, text:"Naquele tempo, disse ele, quando completei cento e sessenta e cinco anos, gerei meu filho Matusalém. Depois disso, vivi duzentos anos e, ao todo, minha vida foi de trezentos e sessenta e cinco anos." },
+        { n:3, text:"No primeiro dia do primeiro mês, estava eu sozinho em minha casa descansando no meu leito, quando adormeci. E quando estava adormecido, uma grande tristeza tomou conta de meu coração e chorei durante o sono." },
+        { n:4, text:"Então me apareceram dois homens, extraordinariamente grandes, como eu nunca vira antes na terra; suas faces resplandeciam como sol e os seus olhos eram como uma chama, e de seus lábios saía um canto e um fogo." },
+        { n:5, text:"Eles estavam em pé, na cabeceira de meu leito, e puseram-se a chamar-me pelo nome. Acordei e vi claramente aqueles dois homens de pé diante de mim. E os homens disseram: Tem coragem, Enoque, não temas; o Deus eterno nos mandou a ti." },
+      ],
+      3: [
+        { n:1, text:"Aconteceu que, depois de Enoque ter falado com os filhos, os anjos o levaram em suas asas ao primeiro céu, e o puseram nas nuvens." },
+        { n:2, text:"E aí eu olhei, e olhei outra vez mais para o alto e vi o éter, e eles me puseram no primeiro céu e me mostraram um grande mar maior que o mar da terra." },
+        { n:3, text:"Trouxeram até mim os anciãos e os dirigentes das ordens estelares, e mostraram-me duzentos anjos que dirigiam as estrelas e suas funções nos céus, e voaram com suas asas." },
+      ],
+      8: [
+        { n:1, text:"E aqueles homens me tomaram e me conduziram ao terceiro céu, e lá me puseram: e olhei para baixo e vi os produtos daquele lugar, que jamais foram conhecidos." },
+        { n:2, text:"E vi as mais doces árvores floridas e olhei seus frutos e os alimentos que produziam, e todos exalavam as mais doces fragrâncias." },
+        { n:3, text:"E no meio daquelas árvores, a da vida, naquele lugar onde Deus descansa quando vai para o paraíso; e essa árvore é de uma qualidade e fragrância inefáveis, e mais adornada do que qualquer coisa que existe." },
+        { n:4, text:"E o paraíso está entre a corruptibilidade e a incorruptibilidade. E de suas fontes brotam mel e leite, e de seus jorros saem óleo e vinho, e eles se separam em quatro partes e vão dar no Paraíso do Éden." },
+      ],
+      22: [
+        { n:1, text:"No décimo céu, Aravoth, vi como era a face do Senhor, como o ferro que arde no fogo e que, ao sair, emite faíscas e queima. Assim vi a face do Senhor, mas a face do Senhor é inefável, maravilhosa e muito sublime e muito terrível." },
+        { n:2, text:"E quem sou eu para falar sobre o inexprimível ser do Senhor e sua magnificente face? E não posso contar a quantidade de suas muitas instruções e várias vozes, o trono do Senhor muito grande." },
+        { n:3, text:"E devo inclinar-me e reverenciar o Senhor, e o Senhor com seus lábios, disse-me: Tem coragem, Enoque, não temas, levanta-te diante de minha face na eternidade." },
+      ],
+    }
+  },
+  // 3
+  {
+    id: "enoch3",
+    name: "3º Livro de Enoque",
+    category: "Pseudepígrafo",
+    desc: "Rabi Ismael ascende ao sétimo céu e encontra Metatron, o anjo supremo identificado com Enoque. Descreve a hierarquia celestial e os mistérios do Trono de Glória.",
+    chapters: {
+      1: [
+        { n:1, text:"Quando subi no céu para contemplar a visão da Carruagem de Luz e entrei nos seis salões, eram um dentro do outro; assim que cheguei à porta do sétimo salão, fiquei em silêncio diante de Deus." },
+        { n:2, text:"Senhor do Universo, peço-Te que o mérito de Arão, filho de Anrão, amante e perseguidor da paz, seja válido para mim nesta hora, para que os anjos que estão com Cassiel não possam obter poder sobre mim." },
+        { n:3, text:"Por fim, Deus enviou-me Metatron, seu servo, o anjo, o príncipe da presença, e ele, espalhando suas asas, com grande alegria veio me encontrar para me salvar da mão dos anjos." },
+        { n:4, text:"E ele me levou pela mão, e disse-me: Entre em paz diante do altar como um rei exaltado e veja a Carruagem de Luz. Então entrei no sétimo salão, e ele me levou à presença do Criador." },
+      ],
+      4: [
+        { n:1, text:"Perguntei a Metatron e disse-lhe: Por que você é chamado pelo Criador, por setenta nomes? Tu és maior do que todos os príncipes, mais altos do que todos os anjos, amado mais do que todos os servos." },
+        { n:2, text:"Ele respondeu e disse-me: Porque sou Enoque, filho de Jarede. Porque quando a geração da inundação pecou e foi confundida em seus feitos, dizendo a Deus: Afasta-te de nós." },
+        { n:3, text:"Então Deus me tirou do meio deles para ser uma testemunha contra eles no alto céu para todos os habitantes do mundo. E Deus me designou para ser um príncipe e um governante entre os anjos ministradores." },
+      ],
+      10: [
+        { n:1, text:"Assim que Deus me tirou da geração do dilúvio, ele me levou nas asas do vento da Sua Presença até o mais alto paraíso e me levou para os grandes palácios da extensão do mais alto Céu." },
+        { n:2, text:"Antes de me designar para atender o Trono da Glória, Deus abriu a mim trezentos mil portões de Compreensão, trezentos mil portões de sutileza, trezentos mil portões da vida, trezentos mil portões de graça e bondade amorosa." },
+        { n:3, text:"Naquela hora, Deus acrescentou em mim a sabedoria para a sabedoria, entendimento para o entendimento, sutileza para a sutileza, conhecimento para o conhecimento, misericórdia para a misericórdia." },
+      ],
+    }
+  },
+  // 4
+  {
+    id: "esdras1",
+    name: "1º Esdras",
+    category: "Deuterocanônico",
+    desc: "Versão grega do livro de Esdras, narrando a reforma de Josias, a destruição de Jerusalém, o retorno do exílio babilônico e a restauração do culto no Templo.",
+    chapters: {
+      1: [
+        { n:1, text:"E Josias celebrou a Páscoa em Jerusalém a seu Senhor, e ofereceu a Páscoa no décimo quarto dia do primeiro mês." },
+        { n:2, text:"Ele colocou os sacerdotes por suas divisões, vestidos com seus ornamentos, no templo do Senhor." },
+        { n:3, text:"E disse aos levitas, os servidores sagrados de Israel, para que se santificassem ao Senhor ao colocarem a arca santa na casa que o rei Salomão, filho de Davi, havia edificado." },
+      ],
+      3: [
+        { n:1, text:"Ora, o rei Dário deu um grande banquete para todos os seus súditos e para todos os de sua casa, e para todos os príncipes da Média e da Pérsia." },
+        { n:2, text:"E todos os sátrapas e generais e governadores que estavam sob ele, da Índia até a Etiópia, nas cento e vinte e sete províncias, assentaram-se e comeram e beberam e quando ficaram saciados partiram." },
+        { n:3, text:"Então os três jovens guardas do corpo do rei que guardavam sua pessoa disseram um para o outro: Vamos cada um de nós dizer qual coisa é mais forte; e ao que disser a palavra mais sábia, o rei Dário lhe dará grandes presentes." },
+      ],
+    }
+  },
+  // 5
+  {
+    id: "esdras2",
+    name: "2º Esdras",
+    category: "Pseudepígrafo",
+    desc: "Visões apocalípticas atribuídas a Esdras contendo diálogos com o anjo Uriel sobre teodiceia, o sofrimento de Israel e revelações sobre o fim dos tempos.",
+    chapters: {
+      1: [
+        { n:1, text:"O segundo livro do profeta Esdras, filho de Sereias, filho de Azarias, que estava cativo no país dos medas no reinado de Artaxerxes, rei dos persas." },
+        { n:2, text:"A palavra do Senhor veio a mim, dizendo: Vai e declara ao meu povo suas maldades, e aos seus filhos as iniquidades que cometeram contra mim." },
+      ],
+      3: [
+        { n:1, text:"No trigésimo ano após a destruição da cidade, estava eu em Babilônia — eu Salatiel, que também me chamo Esdras. Estava perturbado e deitado em meu leito." },
+        { n:2, text:"Pois meu espírito estava muito agitado e começou a falar ao Deus Altíssimo com palavras angustiadas." },
+        { n:3, text:"E disse: Ó Senhor, não falaste tu desde o princípio, quando moldaste a terra — e isso sem auxílio — e mandaste o pó e ele te obedeceu, e tu soprastes nele teu espírito vivificante e ele viveu diante de ti?" },
+      ],
+    }
+  },
+  // 6
+  {
+    id: "tobias",
+    name: "Livro de Tobias",
+    category: "Deuterocanônico",
+    desc: "Narrativa de Tobit, israelita piedoso, e seu filho Tobias, que empreende uma jornada guiado pelo arcanjo Rafael disfarçado, resgatando Sara de um demônio e curando seu pai.",
+    chapters: {
+      1: [
+        { n:1, text:"Livro das palavras de Tobit, filho de Tobiel, filho de Ananiel, filho de Aduel, filho de Gabael, filho de Rafael, filho de Raguel, da descendência de Asiel, da tribo de Naftali." },
+        { n:2, text:"No tempo de Salmaneser, rei dos assírios, ele foi levado cativo de Tísbe, que fica ao sul de Cedes Naftali na Galileia, acima de Asor." },
+        { n:3, text:"Eu, Tobit, andei nos caminhos da verdade e da justiça todos os dias da minha vida, e prestei muitas esmolas a meus irmãos e compatriotas que foram comigo cativos para Nínive." },
+      ],
+      3: [
+        { n:1, text:"Então com tristeza no coração, suspirei e chorei, e comecei a orar com lamentos: Tu és justo, Senhor, e todas as tuas obras são justas; todos os teus caminhos são misericórdia e verdade." },
+        { n:2, text:"E agora, Senhor, lembra-te de mim, olha para mim e não me castigue por meus pecados e por minhas ignorâncias e as de meus pais, que pecaram diante de ti." },
+        { n:3, text:"Pois desobedecemos a teus mandamentos, e tu nos entregaste ao saque, ao cativeiro, à morte e para sermos o escárnio de todas as nações entre as quais nos dispersaste." },
+      ],
+    }
+  },
+  // 7
+  {
+    id: "judith",
+    name: "Livro de Judite",
+    category: "Deuterocanônico",
+    desc: "Relato heroico de Judite, viúva judia que salva sua cidade ao seduzir e decapitar o general assírio Holofernes, tornando-se símbolo de coragem e fé.",
+    chapters: {
+      1: [
+        { n:1, text:"No décimo segundo ano do reinado de Nabucodonosor, que reinou sobre os assírios na grande cidade de Nínive, no tempo em que Arfaxate reinava sobre os medas em Ecbátana." },
+        { n:2, text:"E construiu ao redor de Ecbátana muralhas com pedras lavradas, com largura de três côvados e comprimento de seis côvados; e fez a altura do muro de setenta côvados." },
+      ],
+      8: [
+        { n:1, text:"Naqueles dias foi informada disso Judite, filha de Merari, filho de Ox, filho de José, filho de Uziel, filho de Elquias, filho de Ananias, filho de Gideão, filho de Refaim, filho de Aquisaque, filho de Elias." },
+        { n:2, text:"Seu marido era Manassés, que era da mesma tribo e parentela dela. Ele morreu nos dias da ceifa do trigo." },
+        { n:3, text:"Pois, quando estava em pé supervisionando os que atavam os feixes no campo, o calor caiu sobre sua cabeça, e ele caiu na cama e morreu na sua cidade Betúlia." },
+      ],
+      13: [
+        { n:1, text:"Quando ficou tarde, os servos de Holofernes se apressaram a partir, e Bagoas fechou a tenda por fora e os despediu de diante de seu senhor." },
+        { n:2, text:"E eles foram para suas camas, pois todos estavam cansados, porque o banquete fora muito longo." },
+        { n:3, text:"E Judite ficou sozinha na tenda, e Holofernes estava estendido em sua cama, pois o vinho o tinha dominado." },
+        { n:4, text:"E Judite disse ao anjo de Deus: Senhor Deus de todo poder, olha nesta hora para as obras de minha mão para exaltação de Jerusalém. Pois agora é o tempo de socorrer tua herança." },
+        { n:5, text:"E ela se aproximou da coluna da cama que estava à cabeça de Holofernes, e tirou a sua adaga de lá; e, chegando perto da cama, tomou a cabeça dele pelo cabelo." },
+      ],
+    }
+  },
+  // 8
+  {
+    id: "sabedoria",
+    name: "Sabedoria de Salomão",
+    category: "Deuterocanônico",
+    desc: "Obra sapiencial que louva a Sabedoria divina como caminho para a imortalidade, critica a idolatria e relembra a proteção de Deus ao povo de Israel no Egito.",
+    chapters: {
+      1: [
+        { n:1, text:"Amai a justiça, vós que governais a terra; pensai com retidão no Senhor, e buscai-o com simplicidade de coração." },
+        { n:2, text:"Porque ele se deixa encontrar por aqueles que não o tentam, e se revela àqueles que nele confiam." },
+        { n:3, text:"Os pensamentos perversos separam os homens de Deus; e o seu poder, quando posto à prova, confunde os insensatos." },
+      ],
+      7: [
+        { n:1, text:"Também eu sou um homem mortal, semelhante a todos, descendente daquele primeiro formado de terra. Fui plasmado em carne no seio de uma mãe." },
+        { n:2, text:"Durante dez meses fui consolidado em sangue, da semente de um homem e do prazer que acompanha o casamento." },
+        { n:3, text:"E quando nasci, respirei o ar comum, e caí sobre a terra que a todos recebe igualmente: o primeiro choro que dei foi o mesmo de todos." },
+        { n:4, text:"Fui criado em fraldas e com cuidados, pois nenhum rei teve outro princípio de existência." },
+        { n:5, text:"Para todos, portanto, não há senão uma entrada na vida e uma só saída." },
+      ],
+    }
+  },
+  // 9
+  {
+    id: "eclesiastico",
+    name: "Eclesiástico (Sirácida)",
+    category: "Deuterocanônico",
+    desc: "Extensa coleção de máximas sapienciais do escriba Jesus ben Sirá, abordando temas como a Sabedoria, a família, a amizade, o temor de Deus e os grandes heróis de Israel.",
+    chapters: {
+      1: [
+        { n:1, text:"Toda a sabedoria vem do Senhor e com ele permanece para sempre." },
+        { n:2, text:"A areia dos mares, as gotas de chuva e os dias da eternidade, quem os pode contar? A altura do céu, a largura da terra, o abismo e a sabedoria, quem os pode sondar?" },
+        { n:3, text:"A sabedoria foi criada antes de todas as coisas, e a inteligência prudente existe desde a eternidade." },
+      ],
+      24: [
+        { n:1, text:"A Sabedoria proclama o seu próprio elogio, e se glorifica no meio do seu povo." },
+        { n:2, text:"Na assembleia do Altíssimo ela abre a boca, e se glorifica perante o seu poder." },
+        { n:3, text:"Saí da boca do Altíssimo e, como névoa, cobri a terra." },
+        { n:4, text:"Habitei nas alturas, e o meu trono estava numa coluna de nuvem." },
+        { n:5, text:"Percorri sozinha o círculo do céu, e andei no fundo dos abismos." },
+      ],
+      44: [
+        { n:1, text:"Quero agora cantar o louvor dos homens piedosos, dos nossos pais em suas gerações." },
+        { n:2, text:"O Senhor lhes concedeu grande glória por sua grandeza desde a eternidade." },
+        { n:3, text:"Houve entre eles quem reinou e foi renomado pelo seu poder, quem foi conselheiro sábio pelo seu entendimento." },
+      ],
+    }
+  },
+  // 10
+  {
+    id: "baruc",
+    name: "Livro de Baruc",
+    category: "Deuterocanônico",
+    desc: "Escrito atribuído ao secretário de Jeremias, contendo oração de confissão, poema sobre a Sabedoria inacessível, hino de consolação aos exilados e a Carta de Jeremias.",
+    chapters: {
+      1: [
+        { n:1, text:"Estas são as palavras do livro que Baruc, filho de Nerias, filho de Massias, filho de Sedecias, filho de Asadias, filho de Hilquias, escreveu na Babilônia." },
+        { n:2, text:"No quinto ano, no sétimo dia do mês, no tempo em que os caldeus tomaram Jerusalém e a queimaram." },
+        { n:3, text:"E Baruc leu as palavras deste livro para Jeconias, filho de Joiaquim, rei de Judá, e para todo o povo que veio ouvir o livro." },
+      ],
+      3: [
+        { n:1, text:"Senhor Todo-poderoso, Deus de Israel, a alma angustiada e o espírito contristado clamam a ti." },
+        { n:2, text:"Ouve, Senhor, e tem misericórdia, pois somos pecadores diante de ti." },
+        { n:3, text:"Tu reinas eternamente, enquanto nós nos vamos extinguindo para sempre." },
+        { n:4, text:"Senhor Todo-poderoso, Deus de Israel, ouve a oração dos mortos de Israel, dos filhos dos que pecaram diante de ti, que não te escutaram." },
+      ],
+    }
+  },
+  // 11
+  {
+    id: "oracao_azarias",
+    name: "Oração de Azarias",
+    category: "Deuterocanônico",
+    desc: "Inserção grega ao livro de Daniel contendo a oração de Azarias na fornalha ardente e o Cântico dos Três Jovens, hino de louvor a Deus por toda a criação.",
+    chapters: {
+      1: [
+        { n:1, text:"E andavam pelo meio do fogo, louvando a Deus e bendizendo ao Senhor. E Azarias ficou em pé e orou desta maneira; e, abrindo a boca no meio do fogo, disse:" },
+        { n:2, text:"Bendito és tu, Senhor, Deus de nossos pais, teu nome é digno de louvor e de glória para sempre." },
+        { n:3, text:"Pois és justo em tudo o que fizeste a nosso respeito, e todas as tuas obras são verdadeiras, e retos os teus caminhos, e todos os teus julgamentos são verdade." },
+        { n:4, text:"Em tudo o que nos trouxeste por cima, e sobre a cidade santa de nossos pais, Jerusalém, tens cumprido fielmente um juízo verdadeiro." },
+        { n:5, text:"Pois pelo nosso pecado fizeste tudo isso: porque nós pecamos e transgredimos ao afastar-nos de ti, e erramos em todas as coisas." },
+      ],
+    }
+  },
+  // 12
+  {
+    id: "macabeus1",
+    name: "1º Macabeus",
+    category: "Deuterocanônico",
+    desc: "Crônica histórica da revolta dos Macabeus contra o domínio selêucida e a profanação do Templo de Jerusalém por Antíoco IV Epifânio.",
+    chapters: {
+      1: [
+        { n:1, text:"Depois que Alexandre, filho de Filipe, o macedônio, que saiu da terra de Quítim, derrotou Dário, rei dos persas e dos medas, tornou-se rei em seu lugar, havendo primeiro reinado na Grécia." },
+        { n:2, text:"Ele travou muitas batalhas, conquistou fortalezas e massacrou os reis da terra. Avançou até as extremidades da terra e saqueou as riquezas de muitas nações." },
+        { n:3, text:"A terra ficou em silêncio diante dele, e seu coração se encheu de arrogância e soberba. Reuniu um exército muito poderoso e dominou países, nações e governantes." },
+      ],
+      2: [
+        { n:1, text:"Naqueles dias levantou-se Matatias, filho de João, filho de Simeão, sacerdote da família de Joyarib, de Jerusalém. Estabeleceu-se em Modim." },
+        { n:2, text:"Tinha ele cinco filhos: João, chamado Gadis; Simão, chamado Tasis; Judas, chamado Macabeu; Eleazar, chamado Avaran; e Jônatas, chamado Apfus." },
+        { n:3, text:"Quando ele viu as blasfêmias que eram praticadas em Judá e em Jerusalém, disse: Ai de mim! Por que nasci para ver a ruína do meu povo e a ruína da cidade santa?" },
+      ],
+    }
+  },
+  // 13
+  {
+    id: "macabeus2",
+    name: "2º Macabeus",
+    category: "Deuterocanônico",
+    desc: "Versão teológica da revolta dos Macabeus, enfatizando o martírio, a ressurreição dos mortos e a intercessão dos santos. Contém as histórias dos mártires Eleazar e os sete irmãos.",
+    chapters: {
+      1: [
+        { n:1, text:"Aos irmãos judeus do Egito, saudações dos irmãos judeus em Jerusalém e na terra da Judéia: que a paz de Deus esteja convosco." },
+        { n:2, text:"Que Deus vos faça bem e se lembre de sua aliança com Abraão, Isaac e Jacó, seus servos fiéis." },
+        { n:3, text:"Que ele dê a todos vós um coração para o adorar e para cumprir a sua vontade com grande coração e espírito desejoso." },
+      ],
+      7: [
+        { n:1, text:"Aconteceu também que sete irmãos foram detidos com sua mãe. O rei tentou forçá-los, com torturas a golpes de açoite, a comer carne de porco, contra a lei." },
+        { n:2, text:"Um deles, tomando a palavra em nome de todos, disse: Que pretendes perguntar e aprender de nós? Estamos prontos a morrer a não a transgredir as leis de nossos pais." },
+        { n:3, text:"O rei encolerizado ordenou que fossem aquecidas as frigideiras e caldeiras. Logo que estiveram ardendo." },
+      ],
+    }
+  },
+  // 14
+  {
+    id: "ev_filipe",
+    name: "Evangelho de Felipe",
+    category: "Gnóstico",
+    desc: "Texto gnóstico de Nag Hammadi apresentado como revelações de Felipe, discutindo sacramentos, a natureza da ressurreição e a união sagrada entre Cristo e Maria Madalena.",
+    chapters: {
+      1: [
+        { n:1, text:"Um hebreu faz hebreus, e tais pessoas são chamadas de prosélitos. Mas um prosélito não faz outro prosélito. Alguns são como eram e fazem outros como eles, enquanto outros meramente existem." },
+        { n:2, text:"O escravo busca apenas ser livre, mas não aspira à herança de seu senhor. O filho, entretanto, não é apenas filho, mas reivindica a herança do pai." },
+        { n:3, text:"Aqueles que herdam os mortos estão mortos eles mesmos, e herdam os mortos. Aqueles que herdam o que é vivo estão vivos, e herdam tanto o que é vivo quanto o que é morto." },
+      ],
+      2: [
+        { n:1, text:"A luz e a escuridão, a vida e a morte, o direito e o esquerdo são irmãos uns dos outros. É impossível separar um do outro. Por este motivo nem o bem é bom, nem o mal é mau." },
+        { n:2, text:"A vida não é vida, a morte não é morte. Por este motivo cada um se dissolverá em sua natureza essencial. Mas aqueles que são exaltados acima do mundo são indissolúveis, eternos." },
+        { n:3, text:"Os nomes dados às coisas terrenas são fonte de grande engano, porque desviam nossos pensamentos do que é correto para o que é incorreto." },
+      ],
+    }
+  },
+  // 15
+  {
+    id: "ev_tome",
+    name: "Evangelho de Tomé",
+    category: "Gnóstico",
+    desc: "Coleção de 114 ditos secretos atribuídos a Jesus, transmitidos por Dídimo Judas Tomé. Encontrado em Nag Hammadi em 1945, é o mais famoso dos evangelhos gnósticos.",
+    chapters: {
+      1: [
+        { n:1, text:"Estes são os ditos secretos que o Jesus vivo disse e que Dídimo Judas Tomé registrou." },
+        { n:2, text:"E ele disse: Quem quer que descubra a interpretação destes ditos não experimentará a morte." },
+        { n:3, text:"Jesus disse: Que aquele que busca não pare de buscar até que ele encontre; e quando ele encontrar, ele ficará perturbado; e quando ele ficar perturbado, ele ficará maravilhado e reinará sobre o todo." },
+        { n:4, text:"Jesus disse: O homem velho em dias não hesitará em perguntar a uma criança de sete dias sobre o lugar da vida, e ele viverá. Pois muitos que são primeiros serão últimos, e eles se tornarão um único." },
+      ],
+      2: [
+        { n:1, text:"Jesus disse: Conhece o que está na tua vista, e o que está escondido de ti te será revelado. Pois não há nada escondido que não será manifesto." },
+        { n:2, text:"Seus discípulos o interrogaram e disseram-lhe: Queres que jejuemos? Como devemos orar? Devemos dar esmolas? Que dieta devemos observar?" },
+        { n:3, text:"Jesus disse: Não minta, e não faça o que você odeia, pois todas as coisas são planas à vista do Céu. Pois não há nada escondido que não será revelado, e não há nada coberto que permanecerá sem ser desdobrado." },
+      ],
+    }
+  },
+  // 16
+  {
+    id: "ev_maria",
+    name: "Evangelho de Maria Madalena",
+    category: "Gnóstico",
+    desc: "Fragmento copta apresentando Maria Madalena como discípula privilegiada de Jesus, que recebeu revelações secretas sobre a alma e sua jornada ascendente através das potências.",
+    chapters: {
+      1: [
+        { n:1, text:"Depois que ele disse isso, ele os deixou. Mas eles ficaram tristes e choraram muito e disseram: Como iremos até os gentios e pregamos o evangelho do reino do filho do homem?" },
+        { n:2, text:"Se eles não o pouparam, como nos pouparão? Então Maria se levantou, os saudou todos, e disse a seus irmãos: Não chorem e não fiquem tristes, e nem hesitem." },
+        { n:3, text:"Porque a sua graça estará completamente com vocês e os protegerá. Em vez disso, vamos louvá-la grandiosidade, pois ele nos preparou e nos fez seres humanos." },
+      ],
+      2: [
+        { n:1, text:"Pedro disse a Maria: Irmã, nós sabemos que o Salvador te amava mais do que o resto das mulheres. Conte-nos as palavras do Salvador que você se lembra, as quais você conhece mas que nós não sabemos." },
+        { n:2, text:"Maria respondeu e disse: O que está escondido de vocês eu lhes proclamarei. E ela começou a falar a eles estas palavras." },
+        { n:3, text:"Ela disse: Eu vi o Senhor numa visão, e eu disse a ele: Senhor, eu te vi hoje numa visão. Ele respondeu e disse a mim: Abençoada estás tu porque não vacilastes ao me ver." },
+      ],
+    }
+  },
+  // 17
+  {
+    id: "ev_judas",
+    name: "Evangelho de Judas",
+    category: "Gnóstico",
+    desc: "Texto gnóstico que reinterpreta Judas Iscariotes como o discípulo mais próximo de Jesus, o único que compreendeu a verdadeira identidade divina de Cristo e atuou segundo seu pedido.",
+    chapters: {
+      1: [
+        { n:1, text:"O relato secreto da revelação que Jesus falou em conversa com Judas Iscariotes durante uma semana, três dias antes de ele celebrar a Páscoa." },
+        { n:2, text:"Quando Jesus apareceu na terra, ele realizou milagres e grandes maravilhas para a salvação da humanidade. E como alguns andavam no caminho da justiça enquanto outros andavam em suas transgressões." },
+        { n:3, text:"Os doze discípulos foram reunidos e sentaram-se e lembraram o que o Salvador dissera e todos eles estavam fazendo graças e louvando. Jesus se aproximou deles." },
+        { n:4, text:"Quando seus discípulos o viram fazendo isso, eles começaram a oferecer-lhe graças, um por um, sobre a mesa. Ele ri deles." },
+        { n:5, text:"O discípulo disse: Mestre, por que você ri de nossa ação de graças? Nós fizemos o que é correto. Ele respondeu e disse a eles: Não estou rindo de vocês. Vocês não estão fazendo isso pela sua própria vontade, mas porque é através disso que seu deus será louvado." },
+      ],
+      2: [
+        { n:1, text:"Jesus disse: Afaste-se dos outros e eu lhe direi os mistérios do reino. É possível para você chegar a ele, mas você vai sofrer muito." },
+        { n:2, text:"Judas disse a ele: Quando a grande geração sagrada vier? Quando virá o dia da luz para aquela geração? E o Senhor disse: Levante seus olhos e olhe para a nuvem e a luz dentro dela e as estrelas ao redor dela." },
+        { n:3, text:"A estrela que lidera o caminho é sua estrela. Judas levantou seus olhos e viu a nuvem luminosa, e entrou nela." },
+      ],
+    }
+  },
+  // 18
+  {
+    id: "ev_joao_ap",
+    name: "Apócrifo de João",
+    category: "Gnóstico",
+    desc: "Revelação gnóstica recebida pelo apóstolo João após a ressurreição de Cristo. Descreve o sistema cosmológico de Nag Hammadi: o Pai invisível, a Barbelo, os Éons e a criação demiúrgica.",
+    chapters: {
+      1: [
+        { n:1, text:"O ensinamento do Salvador, e a revelação dos mistérios, e as coisas escondidas no silêncio, as quais ele ensinou ao seu discípulo João." },
+        { n:2, text:"E aconteceu que, um dia, enquanto João, o irmão de Tiago — que são filhos de Zebedeu — havia subido ao templo, um fariseu chamado Arimanio se aproximou dele e lhe disse: Onde está teu mestre, a quem tu seguiste?" },
+        { n:3, text:"E eu disse a ele: Ele retornou ao lugar de onde veio. O fariseu disse: O nazareno enganou vocês com mentiras, fechou os seus corações e desviou vocês dos costumes de seus pais." },
+      ],
+      2: [
+        { n:1, text:"O Espírito-Virgem é a luz invisível que é santa, ela que é inefável, imperfeita em cada perfeição, abençoada, ela que existe para sempre." },
+        { n:2, text:"O Pai contemplou a sua própria imagem ao vê-la na água pura de luz que o cerca. E sua mente se tornou pensamento, realizando-se com aquele que se parece com a luz." },
+        { n:3, text:"Esta é a primeira potência que precedeu o todo, que saiu da mente do Pai: é a prôtioia, o pensamento do Todo, a luz, a imagem do invisível, o Espírito perfeito, o primeiro poder." },
+      ],
+    }
+  },
+  // 19
+  {
+    id: "ev_valentino",
+    name: "Evangelho Valentino",
+    category: "Gnóstico",
+    desc: "Meditação teológica da escola valentiniana sobre a Ignorância, o Error e o Evangelho como a restauração do conhecimento divino, reconduzindo os seres da Plenitude ao Pai.",
+    chapters: {
+      1: [
+        { n:1, text:"O Evangelho da Verdade é uma alegria para aqueles que receberam do Pai da Verdade a graça de o conhecerem, pelo poder do Verbo que veio da Plenitude." },
+        { n:2, text:"O Verbo que está na mente e no pensamento do Pai, ao qual eles chamam O Salvador, é aquele nome pelo qual ele fará a obra pela salvação daqueles que eram ignorantes sobre o Pai." },
+        { n:3, text:"Pois o nome do Evangelho é a proclamação da esperança, sendo uma descoberta para aqueles que buscam." },
+      ],
+      2: [
+        { n:1, text:"A Ignorância sobre o Pai gerou angústia e terror. E a angústia ficou densa como um nevoeiro, de maneira que ninguém podia ver. Por este motivo o Erro tornou-se poderoso." },
+        { n:2, text:"Trabalhou na sua própria matéria inutilmente, não conhecendo a verdade. Estava em uma forma moldada enquanto tentava produzir uma coisa poderosa e bela em substituição à verdade." },
+        { n:3, text:"Quando o Cristo veio, aquele que penetrou nos meios, e falou acerca do fim bem como do começo, e revelou o conhecimento daquele que está escondido, aquele que é chamado o Pai Misericordioso, o Pai excelente." },
+      ],
+    }
+  },
+  // 20
+  {
+    id: "ev_hebreus",
+    name: "Evangelho dos Hebreus",
+    category: "Judaico-Cristão",
+    desc: "Fragmentos de um evangelho nazareno que circulava entre as comunidades judaico-cristãs. Apresenta tradições únicas sobre o batismo de Jesus, aparições pós-ressurreição e uma visão sapiencial do Espírito Santo.",
+    chapters: {
+      1: [
+        { n:1, text:"Segundo o Evangelho escrito em língua hebraica que os Nazarenos usam: E aconteceu que quando o Senhor subiu da água, desceu a toda a fonte do Espírito Santo, e repousou sobre Ele e disse a Ele." },
+        { n:2, text:"Meu filho, em todos os profetas eu estava esperando que viesses e que eu pudesse repousar em ti. Pois tu és meu repouso, tu és meu Filho primogênito que reina para sempre." },
+        { n:3, text:"Assim está escrito no Evangelho dos Hebreus: A mãe do Senhor e seus irmãos disseram a ele: João o Batista está batizando para a remissão dos pecados; vamos e sejamos batizados por ele." },
+      ],
+      2: [
+        { n:1, text:"Mas ele lhes disse: Que pecado cometi em que deva ir e ser batizado por ele? A menos que esta mesma coisa que eu disse seja de ignorância." },
+        { n:2, text:"E no mesmo Evangelho: Se o teu irmão pecou contra ti com palavras e fez reparação, receba-o sete vezes num dia. Disse Simão, seu discípulo: Sete vezes em um dia? O Senhor respondeu e disse a ele: Eu digo a ti, até setenta vezes sete." },
+      ],
+    }
+  },
+  // 21
+  {
+    id: "barnabe",
+    name: "Epístola de Barnabé",
+    category: "Patrística",
+    desc: "Epístola do período apostólico, atribuída ao companheiro de Paulo, interpretando alegoricamente o Antigo Testamento para mostrar que as promessas de Israel pertencem aos cristãos.",
+    chapters: {
+      1: [
+        { n:1, text:"Salve, filhos e filhas, em nome do Senhor que nos amou, na paz!" },
+        { n:2, text:"Tendo em vista os grandes e magníficos decretos de Deus que vos foram feitos, alegro-me sobremaneira e exulto com sobrepujante alegria sobre as vossas abençoadas e gloriosas almas." },
+        { n:3, text:"Tão profundamente implantada é a graça do dom espiritual que vós recebestes, de tal modo que exulto ainda mais sobre vós." },
+      ],
+      6: [
+        { n:1, text:"Pois que diz o profeta para respeito disso? Israel foi ferido por uma espada e se tornaram errantes e exilados. Ouvi a palavra do Senhor, vós que tremeis à sua palavra: Dizei ao povo que veio depois de mim." },
+        { n:2, text:"Mas o que diz mais o profeta? O Todo-Poderoso Senhor dos exércitos estabeleceu que esta nação seja uma nação santa ao seu Senhor." },
+      ],
+    }
+  },
+  // 22
+  {
+    id: "laodicenses",
+    name: "Epístola aos Laodicenses",
+    category: "Patrística",
+    desc: "Breve epístola pseudopaulina dirigida à igreja de Laodicéia, mencionada por Paulo em Colossenses 4:16. Circulou amplamente nas igrejas latinas medievais.",
+    chapters: {
+      1: [
+        { n:1, text:"Paulo, apóstolo não dos homens nem por meio de um homem, mas por meio de Jesus Cristo, aos irmãos que estão em Laodicéia: graça a vós e paz da parte de Deus Pai e do Senhor Jesus Cristo." },
+        { n:2, text:"Dou graças a Cristo em toda oração minha, que sois firmes n'Ele e perseverais em suas obras, esperando a promessa no dia do julgamento." },
+        { n:3, text:"E que não vos deixeis perturbar pelas vãs conversas de alguns que vos falam para afastar-vos da verdade do Evangelho que por mim vos é pregado." },
+        { n:4, text:"E agora que Deus fará com que aqueles que foram por mim convertidos sigam o caminho da verdade, vivendo no exercício das boas obras e necessárias para a salvação da vida eterna." },
+      ],
+    }
+  },
+  // 23
+  {
+    id: "inacio",
+    name: "Cartas de Santo Inácio",
+    category: "Patrística",
+    desc: "Sete cartas escritas pelo bispo de Antioquia enquanto era conduzido preso a Roma para o martírio. Enfatizam a unidade da Igreja em torno do bispo, a Eucaristia e o desejo ardente pelo martírio.",
+    chapters: {
+      1: [
+        { n:1, text:"Inácio, também chamado Teóforo, àquela que é bendita em grandeza na plenitude de Deus Pai, predestinada antes dos séculos, eleita na Paixão verdadeira, pela vontade do Pai e de Jesus Cristo nosso Deus à Igreja digna de bem-aventurança, que vive em Éfeso da Ásia." },
+        { n:2, text:"Tomei conhecimento em Deus de vosso nome tão apreciado, que granjeastes por uma apresentação correta, baseada na fé e caridade em Jesus Cristo nosso Salvador. Sendo imitadores de Deus, reanimados no sangue de Deus, levastes a termo a obra que vos é congênita." },
+        { n:3, text:"Assim ouvindo que eu vinha da Síria, preso pelo Nome e pela esperança que nos são comuns, confiando chegar até Roma para combater as feras, graças à vossa oração, a fim de ter a felicidade de tornar-me discípulo, vós vos apressastes em ver-me." },
+      ],
+      2: [
+        { n:1, text:"Escrevo a todas as Igrejas e insisto junto a todas que morro de boa vontade por Deus, se vós não mo impedirdes. Suplico-vos, não vos transformeis em benevolência inoportuna para mim." },
+        { n:2, text:"Deixai-me ser comida para as feras, pelas quais me é possível encontrar Deus. Sou trigo de Deus e sou moído pelos dentes das feras, para encontrar-me como pão puro de Cristo." },
+        { n:3, text:"Desde a Síria, venho combatendo com feras até Roma, por terra e por mar, de noite e de dia, preso a dez leopardos, isto é, a um destacamento de soldados, que se tornam piores quando se lhes faz o bem." },
+        { n:4, text:"Onde quer que se apresente o bispo, ali também esteja a comunidade, assim como a presença de Cristo Jesus também nos assegura a presença da Igreja Católica." },
+      ],
+    }
+  },
+  // 24
+  {
+    id: "clemente",
+    name: "Cartas de São Clemente",
+    category: "Patrística",
+    desc: "A Primeira Carta de Clemente Romano aos Coríntios é o mais antigo documento cristão extrabíblico. Trata de divisões na comunidade, enfatizando humildade, ordem e sucessão apostólica.",
+    chapters: {
+      1: [
+        { n:1, text:"A Igreja de Deus estabelecida transitoriamente em Roma à Igreja de Deus estabelecida transitoriamente em Corinto, aos eleitos santificados na vontade de Deus, por Nosso Senhor Jesus Cristo: que a graça e a paz vos sejam dadas em plenitude da parte de Deus todo-poderoso, por Jesus Cristo." },
+        { n:2, text:"Por causa das desgraças e calamidades que repentina e continuamente se abateram sobre nós, talvez estejamos a tratar tardiamente dos acontecimentos que se deram entre vós, meus caros, e daquele motim, não conveniente a eleitos de Deus." },
+        { n:3, text:"Ora, quem é que esteve entre vós e não elogiou vossa fé extraordinária e firme? Quem não admirou vossa piedade consciente e suave em Cristo? Quem não louvou a tradição da vossa hospitalidade generosa?" },
+      ],
+      5: [
+        { n:1, text:"Agora, para colocarmos fim aos exemplos antigos, passemos aos atletas que nos tocam de perto; verifiquemos os nobres exemplos da nossa geração." },
+        { n:2, text:"Pedro, que por ciúme injusto não suportou apenas uma ou duas, mas numerosas provas e, depois de assim render testemunho, chegou ao merecido lugar da glória." },
+        { n:3, text:"Por ciúme e discórdia, Paulo ostentou o preço da paciência. Sete vezes acorrentado, exilado, apedrejado, missionário no Oriente e no Ocidente, recebeu a ilustre glória por sua fé." },
+      ],
+    }
+  },
+  // 25
+  {
+    id: "ap_pedro",
+    name: "Apocalipse de Pedro",
+    category: "Gnóstico",
+    desc: "Texto de Nag Hammadi no qual Pedro recebe três visões sobre a crucificação. Apresenta uma cristologia docetista: o Cristo espiritual ri dos que crucificam apenas seu substituto carnal.",
+    chapters: {
+      1: [
+        { n:1, text:"Quando o Salvador estava sentado no Templo, no tricentésimo ano da edificação, satisfeito com a grandeza da Majestade vivente e incorruptível, ele me disse:" },
+        { n:2, text:"Pedro, bem-aventurados os de cima que pertencem ao Pai, que através de mim revelou a vida para aqueles que são da vida; pois eu os recordei, aqueles que estão edificados sobre a sólida base, para que ouçam minhas palavras." },
+        { n:3, text:"Mas tu, Pedro, sê perfeito segundo o nome que eu te coloquei, pois eu ti escolhi, e fiz de ti um princípio para o resto, a quem eu chamei para o conhecimento." },
+      ],
+      2: [
+        { n:1, text:"Enquanto me dizia estas coisas, vi o modo como eles o agarravam, e eu disse: Que vejo, ó Senhor? É a ti que eles aprisionam, enquanto estás entretendo comigo? Quem é esse que sorri alegre sobre a árvore?" },
+        { n:2, text:"E o Senhor me disse: Aquele que viste sobre a árvore alegre e sorridente, este é Jesus, o vivente. Mas este, em cujas mãos e pés introduzem os cravos, é o carnal, o substituto, exposto à vergonha." },
+        { n:3, text:"Olha para ele e para mim! Mas eu, depois de ter visto, disse: Senhor, ninguém olha para você. Fujamos deste lugar." },
+      ],
+    }
+  },
+  // 26
+  {
+    id: "ap_paulo",
+    name: "Apocalipse de Paulo",
+    category: "Gnóstico",
+    desc: "Texto gnóstico de Nag Hammadi descrevendo a ascensão de Paulo pelos céus, onde contempla o julgamento das almas, os anjos guardiões e os mistérios dos dez céus até o Ogdoad.",
+    chapters: {
+      1: [
+        { n:1, text:"A criança pequena falou, dizendo: Eu sei quem você é, Paulo. Você é aquele que foi abençoado do útero de sua mãe. Pois eu vim até você para que você possa subir para Jerusalém, para os seus companheiros apóstolos." },
+        { n:2, text:"E por esta razão você foi chamado. E eu sou o Espírito que te acompanha. Deixe a sua mente acordar, Paulo, e veja que esta montanha sobre a qual você está parado é a montanha de Jericó." },
+        { n:3, text:"Então o Espírito Sagrado que estava falando com ele o alçou alto para o terceiro céu, e ele passou além para o quarto céu. O Espírito Sagrado falou para ele: Olhe e veja sua semelhança sobre a terra." },
+      ],
+      2: [
+        { n:1, text:"Eu vi no quarto céu, anjos parecendo deuses, os anjos trazendo uma alma para fora da terra dos mortos. Eles a puseram frente ao portão do quarto céu. E os anjos estavam açoitando ela." },
+        { n:2, text:"A alma falou, dizendo: Que pecado foi que eu cometi no mundo? O coletor de impostos que habita no quarto céu respondeu, dizendo: Não foi correto cometer todas aquelas ações sem lei que existem no mundo dos mortos." },
+        { n:3, text:"Então eu olhei para cima e vi o Espírito me dizendo: Paulo, venha! Prossiga até mim! Então quando eu fui, o portão se abriu, e eu subi até o quinto céu." },
+        { n:4, text:"Então nós subimos para o sétimo céu, e eu vi um homem velho cuja vestimenta era branca. O trono dele, que está no sétimo céu, era sete vezes mais brilhante do que o sol." },
+      ],
+    }
+  },
+  // 27
+  {
+    id: "ev_nicodemos",
+    name: "Evangelho de Nicodemos",
+    category: "Apócrifo Cristão",
+    desc: "Também chamado Atos de Pilatos, narra em detalhe o julgamento de Jesus, a crucificação, ressurreição e os testemunhos de cura diante de Pilatos. Inclui o relato da descida de Cristo ao Inferno.",
+    chapters: {
+      1: [
+        { n:1, text:"Eu, Ananias, protetor, de hierarquia pretoriana, perito em leis, vim através das divinas Escrituras tomar conhecimento de Nosso Senhor Jesus Cristo e me aproximei dele pela fé." },
+        { n:2, text:"Depois de se haverem reunido em conselho os príncipes dos sacerdotes e os escribas, Anás e Caifás e os restantes dentre os judeus apresentaram-se diante de Pilatos acusando Jesus de muitos feitos, dizendo: Sabemos que ele é filho de José o carpinteiro e que nasceu de Maria." },
+        { n:3, text:"Disse-lhes Pilatos: E o que ele faz e o que ele pretende abolir? Os judeus disseram: Temos uma lei que proíbe a cura no Sabat; pois bem, este, servindo-se das más artes, curou durante o Sabat coxos, machucados, cegos, paralíticos e endemoninhados." },
+      ],
+      2: [
+        { n:1, text:"Mas no momento em que Jesus entrava, os que seguravam os estandartes inclinaram-se e adoraram a Jesus. Os judeus que presenciaram esse gesto de reverência e adoração a Jesus começaram a gritar desaforos contra os que portavam as bandeiras." },
+        { n:2, text:"Então Pilatos disse aos arquissinagogos e anciãos do povo: Por que os que carregam os estandartes os dobraram? E eles responderam: Não somos gregos e servidores das divindades; nossos corpos se inclinaram por eles mesmos e o adoraram." },
+        { n:3, text:"E deixando Jesus no interior do pretório, Pilatos foi até os judeus e lhes disse: Eu não encontro culpa alguma nele. Os judeus replicaram: Ele disse: Eu sou capaz de destruir este templo e reedificá-lo em três dias." },
+      ],
+    }
+  },
+  // 28
+  {
+    id: "ev_pedro",
+    name: "Evangelho de Pedro",
+    category: "Apócrifo Cristão",
+    desc: "Fragmento apócrifo que narra a Paixão e Ressurreição de Jesus com perspectiva docetista. Relata que Jesus não sentiu dor na cruz e apresenta uma cena dramática da ressurreição com gigantes e uma cruz falante.",
+    chapters: {
+      1: [
+        { n:1, text:"Dentre os judeus, porém, ninguém lavou as mãos; nem Herodes nem nenhum de seus juízes. E, por não quererem lavar-se, Pilatos levantou-se." },
+        { n:2, text:"Então o rei Herodes mandou que se encarregassem do Senhor, dizendo-lhes: Executai o que acabo de ordenar que façais com ele." },
+        { n:3, text:"E eles, segurando o Senhor, davam-lhe empurrões e diziam: Arrastemos o Filho de Deus, já que veio cair em nossas mãos. Depois vestiram-no de púrpura e fizeram com que se sentasse no tribunal." },
+        { n:4, text:"Depois, levaram dois ladrões e crucificaram o Senhor no meio deles. Mas ele permanecia calado como se não sentisse dor alguma." },
+      ],
+      2: [
+        { n:1, text:"Era então meio-dia, e a escuridão tomou conta de toda a Judéia. E o Senhor elevou sua voz, dizendo: Força minha, força minha, tu me abandonaste. E, dizendo isto, volatilizou-se e subiu ao céu." },
+        { n:2, text:"E durante a noite que precedia o domingo, enquanto os soldados estavam fazendo a guarda de dois a dois, uma grande voz produziu-se no céu. E viram os céus abertos e dois homens que desciam, tendo à sua volta um grande resplendor." },
+        { n:3, text:"E eles viram três homens que saíam do sepulcro, dois dos quais servindo de apoio a um terceiro, e uma cruz que ia atrás deles. E a cabeça dos dois primeiros chegava até o céu, enquanto que a daquele que era conduzido por eles ultrapassava os céus." },
+        { n:4, text:"E ouviram uma voz vinda dos céus que dizia: Pregaste para os que dormem? E da cruz fez-se ouvir uma resposta: Sim." },
+      ],
+    }
+  },
+  // 29
+  {
+    id: "proto_tiago",
+    name: "Protoevangelho de Tiago",
+    category: "Apócrifo Cristão",
+    desc: "O mais antigo evangelho sobre a infância de Maria, descrevendo seu nascimento milagroso a Ana e Joaquim, sua criação no Templo, o casamento com José e o nascimento virginal de Jesus numa caverna.",
+    chapters: {
+      1: [
+        { n:1, text:"Havia um homem muito rico, de nome Joaquim, que fazia suas oferendas em quantidade dobrada, dizendo: O que sobra ofereço para todo o povoado, e o devido na expiação de meus pecados será para o Senhor a fim de ganhar-lhe as boas graças." },
+        { n:2, text:"Chegou a grande festa do Senhor, na qual os filhos de Israel devem oferecer seus donativos, e Ruben se pôs à frente de Joaquim dizendo-lhe: Não te é lícito oferecer tuas dádivas, enquanto não tiveres gerado um rebento em Israel." },
+        { n:3, text:"Joaquim ficou muito atormentado, e se retirou para o deserto. Ali armou sua tenda e jejuou por quarenta dias e quarenta noites, dizendo a si mesmo: Não sairei daqui até que não me visite o Senhor meu Deus." },
+      ],
+      2: [
+        { n:1, text:"E eis que se lhe apresentou um anjo de Deus, dizendo-lhe: Ana, Ana, o Senhor escutou teus rogos: conceberás e darás à luz e de tua prole se falará em todo o mundo." },
+        { n:2, text:"Ana respondeu: Viva o Senhor meu Deus, que, se chegar a ter algum fruto de bênção, seja menino ou menina, leva-lo-ei como oferenda ao Senhor, e estará a seu serviço todos os dias de sua vida." },
+        { n:3, text:"Ao chegar Maria ao sexto mês de gravidez, voltou José de suas construções e, ao entrar em casa, deu-se conta de que ela estava grávida. Então, feriu seu próprio rosto, jogou-se no chão sobre uma manta e chorou amargamente." },
+      ],
+      3: [
+        { n:1, text:"E encontrando uma caverna, levou-a para dentro e, havendo deixado os seus filhos com ela, foi buscar uma parteira hebréia na região de Belém." },
+        { n:2, text:"E ao chegar à gruta, pararam, e eis que esta estava sombreada por uma nuvem luminosa. E exclamou a parteira: Minh'alma foi engrandecida, porque meus olhos viram coisas incríveis, pois que nasceu a salvação para Israel." },
+        { n:3, text:"E eis que vieram uns magos dizendo: Aonde está o recém-nascido Rei dos Judeus, pois vimos sua estrela no Oriente e viemos para adorá-lo?" },
+      ],
+    }
+  },
+  // 30
+  {
+    id: "ev_infancia_pedro",
+    name: "Evangelho da Infância (Pedro)",
+    category: "Apócrifo Cristão",
+    desc: "Evangelho apócrifo narrado segundo Maria, descrevendo os milagres realizados por Jesus na infância: curas durante a fuga ao Egito, estatuazinhas de barro que ganhavam vida e a visita ao Templo aos 12 anos.",
+    chapters: {
+      1: [
+        { n:1, text:"Com o auxílio e a ajuda do Deus todo poderoso, começamos a escrever o livro dos milagres de nosso Salvador, Mestre e Senhor Jesus Cristo, que se intitula o Evangelho da Infância, conforme narrado por Maria, sua mãe." },
+        { n:2, text:"Encontramos no livro do grande sacerdote Josefo que Jesus falou quando estava no berço e que disse a sua mãe Maria: Eu, que nasci de ti, sou Jesus, o filho de Deus, o Verbo, como te anunciou o anjo Gabriel, e meu Pai me enviou para a salvação do mundo." },
+        { n:3, text:"No ano de 309 da era de Alexandre, Augusto ordenara que todos fossem recenseados em sua cidade natal. José partiu, então, conduzindo Maria, sua esposa. Quando estavam próximos a uma caverna, Maria disse a José que sua hora havia chegado." },
+      ],
+      2: [
+        { n:1, text:"Um sacerdote tinha um filho de trinta anos que estava possuído por um grande número de demônios. Quando os demônios se apossavam dele, rasgavam suas roupas e ele corria nu pela cidade, jogando pedras nos homens." },
+        { n:2, text:"O filho do sacerdote, acometido do mal que o afligia, entrou no albergue insultando José e Maria. Como Maria havia lavado as fraldas do Senhor Jesus e as estendera sobre umas madeiras, o menino possuído pegou uma das fraldas e colocou-a sobre sua cabeça. Imediatamente os demônios fugiram, saindo pela boca." },
+        { n:3, text:"Quando o Senhor Jesus havia completado o seu sétimo ano, ele brincava um dia com outras crianças de sua idade fazendo com terra molhada diversas imagens de animais. Então o Senhor Jesus disse: Ordenarei às figuras que eu fiz que andem, e elas andarão." },
+        { n:4, text:"Havia, em Jerusalém, um homem, chamado Zaqueu, que instruía os jovens. Ele disse a José: José, por que não me envias Jesus para que ele aprenda as letras? O professor preparava-se para chicoteá-lo, mas o Senhor Jesus pôs-se a explicar o significado das letras Aleph e Beth, coisas que o professor jamais ouvira." },
+      ],
+    }
+  },
+];
+
+
+// ──────────────────────────────────────────────
+// STATE
+// ──────────────────────────────────────────────
+let currentBook = null;
+let currentChapter = 1;
+let currentLang = 'pt';
+let translationCache = {}; // key: `${bookId}_${chap}_${lang}`
+
+// ──────────────────────────────────────────────
+// RENDER BOOK LIST
+// ──────────────────────────────────────────────
+function renderBookList() {
+  const list = document.getElementById('bookList');
+  list.innerHTML = BOOKS.map((b, i) => `
+    <div class="book-item" id="bi_${b.id}" onclick="openBook('${b.id}')">
+      <span class="book-num">${String(i+1).padStart(2,'0')}</span>
+      <span class="book-name">${b.name}</span>
+    </div>
+  `).join('');
+}
+
+// ──────────────────────────────────────────────
+// OPEN BOOK
+// ──────────────────────────────────────────────
+function openBook(id) {
+  currentBook = BOOKS.find(b => b.id === id);
+  if (!currentBook) return;
+  currentChapter = 1;
+
+  // sidebar highlight
+  document.querySelectorAll('.book-item').forEach(el => el.classList.remove('active'));
+  document.getElementById('bi_' + id).classList.add('active');
+
+  // show reader
+  document.getElementById('emptyState').style.display = 'none';
+  const rc = document.getElementById('readerContent');
+  rc.style.display = 'block';
+  rc.classList.add('fade-in');
+  setTimeout(() => rc.classList.remove('fade-in'), 400);
+
+  // meta
+  document.getElementById('bookCategory').textContent = currentBook.category;
+  document.getElementById('bookTitle').textContent = currentBook.name;
+  document.getElementById('bookDesc').textContent = currentBook.desc;
+
+  renderChapterNav();
+  renderChapter();
+}
+
+// ──────────────────────────────────────────────
+// CHAPTER NAV
+// ──────────────────────────────────────────────
+function renderChapterNav() {
+  const chapters = Object.keys(currentBook.chapters);
+  document.getElementById('chapterNav').innerHTML = chapters.map(ch => `
+    <button class="ch-btn ${parseInt(ch)===currentChapter?'active':''}" onclick="goChapter(${ch})">Cap. ${ch}</button>
+  `).join('');
+}
+
+function goChapter(n) {
+  currentChapter = n;
+  renderChapterNav();
+  renderChapter();
+}
+
+// ──────────────────────────────────────────────
+// RENDER CHAPTER (native PT or cached translation)
+// ──────────────────────────────────────────────
+function renderChapter(verses) {
+  const data = verses || currentBook.chapters[currentChapter];
+  if (!data) return;
+
+  const langLabels = { pt:'Português', en:'English', es:'Español' };
+  document.getElementById('chapterHeading').textContent = `Capítulo ${currentChapter}`;
+
+  document.getElementById('versesContainer').innerHTML = data.map(v => `
+    <div class="verse fade-in">
+      <span class="verse-num">${v.n}</span>
+      <span class="verse-text">${v.text}</span>
+    </div>
+  `).join('');
+
+  // update translate buttons
+  ['pt','en','es'].forEach(l => {
+    const btn = document.getElementById('btn' + l.charAt(0).toUpperCase() + l.slice(1));
+    if (btn) btn.classList.toggle('active', l === currentLang);
+  });
+}
+
+// ──────────────────────────────────────────────
+// TRANSLATE VIA CLAUDE API
+// ──────────────────────────────────────────────
+async function translateChapter(lang) {
+  if (!currentBook) return;
+  if (lang === currentLang && lang === 'pt') return;
+
+  currentLang = lang;
+
+  // PT is always original
+  if (lang === 'pt') {
+    renderChapter();
+    return;
+  }
+
+  const cacheKey = `${currentBook.id}_${currentChapter}_${lang}`;
+  if (translationCache[cacheKey]) {
+    renderChapter(translationCache[cacheKey]);
+    return;
+  }
+
+  // show loading
+  const overlay = document.getElementById('loadingOverlay');
+  overlay.classList.add('show');
+
+  const verses = currentBook.chapters[currentChapter];
+  const langName = lang === 'en' ? 'English' : 'Spanish';
+
+  const prompt = `You are a biblical scholar and translator. Translate the following verses from Portuguese to ${langName}. 
+Maintain a reverent, archaic, literary tone appropriate for sacred scripture.
+Respond ONLY with a JSON array of objects with keys "n" (verse number, integer) and "text" (translated verse string).
+No preamble, no markdown fences, just the raw JSON array.
+
+Verses to translate:
+${JSON.stringify(verses)}`;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+
+    const data = await response.json();
+    const raw = data.content.map(i => i.text || '').join('');
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const translated = JSON.parse(clean);
+
+    translationCache[cacheKey] = translated;
+    overlay.classList.remove('show');
+    renderChapter(translated);
+
+  } catch (err) {
+    overlay.classList.remove('show');
+    console.error('Translation error:', err);
+    alert('Erro ao traduzir. Verifique sua conexão.');
+  }
+}
+
+// ──────────────────────────────────────────────
+// GLOBAL LANG (translates open chapter if any)
+// ──────────────────────────────────────────────
+function setGlobalLang(lang, btn) {
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (currentBook) translateChapter(lang);
+  else currentLang = lang;
+}
+
+// ── INIT ──
+renderBookList();
+</script>
+</body>
+</html>
