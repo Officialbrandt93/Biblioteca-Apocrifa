@@ -527,6 +527,149 @@ footer p{
 .reveal.visible{opacity:1;transform:none}
 
 /* DECORATIVE RULE */
+/* ── ANNOUNCEMENT BAR ── */
+.announce-bar{
+  position:relative;z-index:10;
+  background:linear-gradient(90deg,#0A0704,#1A1208,#0A0704);
+  border-bottom:1px solid rgba(201,150,12,0.35);
+  overflow:hidden;
+  padding:10px 0;
+}
+.announce-bar::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent 0%,rgba(201,150,12,0.07) 50%,transparent 100%);
+  animation:shimmerBar 3s ease-in-out infinite;
+}
+@keyframes shimmerBar{0%,100%{opacity:0}50%{opacity:1}}
+
+.announce-track{
+  display:flex;align-items:center;gap:0;
+  white-space:nowrap;
+  animation:scrollBar 28s linear infinite;
+}
+@keyframes scrollBar{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+.announce-item{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:0 40px;
+  font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;
+  color:rgba(201,150,12,0.85);text-transform:uppercase;
+}
+.announce-item span{color:var(--gold-bright);font-weight:600}
+.announce-sep{color:rgba(201,150,12,0.3);font-size:14px}
+
+/* ── GUARANTEE ── */
+.guarantee-section{
+  padding:80px 24px;
+  border-top:1px solid var(--border2);
+  border-bottom:1px solid var(--border2);
+  background:linear-gradient(135deg,rgba(139,58,15,0.04),rgba(201,150,12,0.03));
+}
+.guarantee-inner{
+  max-width:860px;margin:0 auto;
+  display:grid;grid-template-columns:auto 1fr;gap:56px;align-items:center;
+}
+@media(max-width:640px){.guarantee-inner{grid-template-columns:1fr;gap:32px;text-align:center}}
+
+.guarantee-badge{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  width:160px;height:160px;flex-shrink:0;
+  border:2px solid var(--gold);
+  border-radius:50%;
+  position:relative;
+  background:radial-gradient(circle,rgba(201,150,12,0.08),transparent 70%);
+}
+.guarantee-badge::before{
+  content:'';position:absolute;inset:-6px;
+  border-radius:50%;
+  border:1px solid rgba(201,150,12,0.2);
+}
+.guarantee-badge::after{
+  content:'';position:absolute;inset:-12px;
+  border-radius:50%;
+  border:1px dashed rgba(201,150,12,0.12);
+  animation:rotateSlow 20s linear infinite;
+}
+@keyframes rotateSlow{to{transform:rotate(360deg)}}
+
+.guarantee-badge-days{
+  font-family:'Cinzel Decorative',serif;
+  font-size:36px;font-weight:700;
+  color:var(--gold-bright);line-height:1;
+}
+.guarantee-badge-label{
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;
+  color:rgba(201,150,12,0.7);text-transform:uppercase;margin-top:4px;
+}
+.guarantee-badge-sub{
+  font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;
+  color:rgba(201,150,12,0.45);text-transform:uppercase;margin-top:2px;
+}
+
+.guarantee-text .section-label{margin-bottom:10px}
+.guarantee-text h3{
+  font-family:'Cinzel',serif;
+  font-size:clamp(20px,3vw,30px);font-weight:600;
+  color:var(--parchment);margin-bottom:16px;line-height:1.25;
+}
+.guarantee-text p{
+  font-family:'Cormorant Garamond',serif;
+  font-size:17px;font-style:italic;
+  color:rgba(242,229,200,0.6);line-height:1.85;
+}
+
+/* ── COUNTDOWN ── */
+.countdown-wrap{
+  display:flex;flex-direction:column;align-items:center;
+  margin:0 auto 32px;
+  padding:20px 28px;
+  border:1px solid rgba(201,150,12,0.3);
+  background:rgba(201,150,12,0.04);
+  max-width:420px;
+  position:relative;overflow:hidden;
+}
+.countdown-wrap::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  animation:shimmerLine 2.5s ease-in-out infinite;
+}
+@keyframes shimmerLine{0%,100%{opacity:0.3}50%{opacity:1}}
+
+.countdown-label{
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:4px;
+  color:rgba(201,150,12,0.6);text-transform:uppercase;margin-bottom:12px;
+}
+.countdown-digits{
+  display:flex;align-items:center;gap:8px;
+}
+.countdown-block{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+}
+.countdown-num{
+  font-family:'Cinzel Decorative',serif;
+  font-size:clamp(28px,6vw,44px);
+  color:var(--gold-bright);
+  line-height:1;
+  min-width:56px;text-align:center;
+  text-shadow:0 0 20px rgba(245,204,96,0.3);
+}
+.countdown-unit{
+  font-family:'Cinzel',serif;font-size:8px;letter-spacing:3px;
+  color:rgba(201,150,12,0.45);text-transform:uppercase;
+}
+.countdown-colon{
+  font-family:'Cinzel Decorative',serif;font-size:32px;
+  color:rgba(201,150,12,0.4);margin-bottom:14px;
+  animation:blink 1s step-end infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+
+.countdown-note{
+  font-family:'IM Fell English',serif;font-style:italic;
+  font-size:12px;color:rgba(242,229,200,0.35);
+  margin-top:10px;
+}
+
 .deco-rule{
   display:flex;align-items:center;gap:20px;
   margin:40px auto;max-width:400px;
@@ -536,6 +679,21 @@ footer p{
 </style>
 </head>
 <body>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="announce-bar" aria-hidden="true">
+  <div class="announce-track" id="announceTrack">
+    <span class="announce-item">☩ <span>Launch Offer</span> <span class="announce-sep">·</span> Get The Complete Library for Only <span>$19</span></span>
+    <span class="announce-item">✦ <span>7-Day Money-Back Guarantee</span> <span class="announce-sep">·</span> No questions asked</span>
+    <span class="announce-item">☩ <span>Instant Access</span> <span class="announce-sep">·</span> Read on any device, no login required</span>
+    <span class="announce-item">✦ <span>One-Time Payment</span> <span class="announce-sep">·</span> Lifetime access, no subscriptions</span>
+    <!-- duplicate for seamless loop -->
+    <span class="announce-item">☩ <span>Launch Offer</span> <span class="announce-sep">·</span> Get The Complete Library for Only <span>$19</span></span>
+    <span class="announce-item">✦ <span>7-Day Money-Back Guarantee</span> <span class="announce-sep">·</span> No questions asked</span>
+    <span class="announce-item">☩ <span>Instant Access</span> <span class="announce-sep">·</span> Read on any device, no login required</span>
+    <span class="announce-item">✦ <span>One-Time Payment</span> <span class="announce-sep">·</span> Lifetime access, no subscriptions</span>
+  </div>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -830,6 +988,22 @@ footer p{
   </div>
 </section>
 
+<!-- GUARANTEE -->
+<section class="guarantee-section reveal">
+  <div class="guarantee-inner">
+    <div class="guarantee-badge">
+      <div class="guarantee-badge-days">7</div>
+      <div class="guarantee-badge-label">Day</div>
+      <div class="guarantee-badge-sub">Money Back</div>
+    </div>
+    <div class="guarantee-text">
+      <span class="section-label">Our promise to you</span>
+      <h3>Read it. Explore it.<br>If it's not for you, we refund.</h3>
+      <p>We stand behind The Apocryphal Library completely. If for any reason you're not satisfied within 7 days of purchase, simply reach out and we'll refund your payment in full — no questions asked, no hoops to jump through. Your trust matters more than the sale.</p>
+    </div>
+  </div>
+</section>
+
 <!-- CTA FINAL -->
 <section class="cta-section" id="offer">
   <span class="section-label reveal">Get instant access</span>
@@ -854,6 +1028,21 @@ footer p{
   </div>
 
   <div class="reveal">
+    <div class="countdown-wrap">
+      <div class="countdown-label">⚡ Launch offer expires in</div>
+      <div class="countdown-digits">
+        <div class="countdown-block">
+          <div class="countdown-num" id="cd-min">49</div>
+          <div class="countdown-unit">Minutes</div>
+        </div>
+        <div class="countdown-colon">:</div>
+        <div class="countdown-block">
+          <div class="countdown-num" id="cd-sec">00</div>
+          <div class="countdown-unit">Seconds</div>
+        </div>
+      </div>
+      <div class="countdown-note">Price increases when the timer ends</div>
+    </div>
     <div class="price-display">$19</div>
     <div class="price-sub">One-time payment — lifetime access</div>
     <a href="#" class="btn-primary">Get Instant Access Now</a>
@@ -873,7 +1062,26 @@ footer p{
 </footer>
 
 <script>
-// Intersection Observer for reveal animations
+// Countdown timer — resets to 49:00 on every page load
+(function(){
+  const MINUTES = 49;
+  const end = Date.now() + MINUTES * 60 * 1000;
+  const minEl = document.getElementById('cd-min');
+  const secEl = document.getElementById('cd-sec');
+
+  function pad(n){ return String(n).padStart(2,'0'); }
+
+  function tick(){
+    const diff = Math.max(0, end - Date.now());
+    const m = Math.floor(diff / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+    minEl.textContent = pad(m);
+    secEl.textContent = pad(s);
+    if(diff > 0) requestAnimationFrame(tick);
+    else { minEl.textContent = '00'; secEl.textContent = '00'; }
+  }
+  tick();
+})();
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
